@@ -4,6 +4,7 @@ import { CategoriesScreen } from "./screens/CategoriesScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Ionicons } from "@expo/vector-icons";
 
 import { MealsOverviewScreen } from "./screens/MealsOverviewScreen";
 import { MealDetailScreen } from "./screens/MealDetailScreen";
@@ -20,10 +21,31 @@ const DrawerNavigator = () => {
         headerTintColor: "white",
         sceneContainerStyle: { backgroundColor: "#715f5f" },
         headerBackTitle: "Back",
+        drawerContentStyle: { backgroundColor: "#715f5f" },
+        drawerInactiveTintColor: "white",
+        drawerActiveTintColor: "black",
+        drawerActiveBackgroundColor: "#654848", //드로우 선택한
       }}
     >
-      <Drawer.Screen name="Categories" component={CategoriesScreen} />
-      <Drawer.Screen name="Favorites" component={FavoritesScreen} />
+      <Drawer.Screen
+        name="Categories"
+        component={CategoriesScreen}
+        options={{
+          title: "All Categories",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="list" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="star" color={color} size={size} />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 };
@@ -45,7 +67,7 @@ export default function App() {
             name="Drawer"
             component={DrawerNavigator}
             options={{
-              title: "All Categories ", // 현재 화면의 타이틀
+              // title: "All Categories ", // 현재 화면의 타이틀
               headerShown: false,
             }}
           />
