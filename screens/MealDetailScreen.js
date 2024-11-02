@@ -12,23 +12,31 @@ import { MealDetails } from "../components/MealDetails";
 import { Subtitle } from "../components/MealDeatil/Subtitle";
 import { List } from "../components/MealDeatil/List";
 import { IconButton } from "../components/IconButton";
-import { FavoritesContext } from "../store/context/favorites-context";
+import { useDispatch, useSelector } from "react-redux";
+//import { FavoritesContext } from "../store/context/favorites-context";
+import { addFavorite, removeFavorite } from "../store/redux/favorites";
 
 export const MealDetailScreen = ({ route, navigation }) => {
-  const favorteMealsCtx = useContext(FavoritesContext);
+  //const favorteMealsCtx = useContext(FavoritesContext);
+  const favoriteMealIds = useSelector((state) => state.favoriteMeals.ids);
+  const dispatch = useDispatch();
 
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
-  const mealIsFavorite = favorteMealsCtx.ids.includes(mealId); //배열 에 존재를 확인해 ture or false 를 반환
+  //const mealIsFavorite = favorteMealsCtx.ids.includes(mealId); //배열 에 존재를 확인해 ture or false 를 반환
+  const mealIsFavorite = favoriteMealIds.includes(mealId);
+
   console.log(mealIsFavorite);
 
   const changeFavoriteStatusHandler = () => {
     //console.log("te");
     if (mealIsFavorite) {
-      favorteMealsCtx.removeFavorite(mealId);
+      // favorteMealsCtx.removeFavorite(mealId);
+      dispatch(removeFavorite({ id: mealId }));
     } else {
-      favorteMealsCtx.addFavorite(mealId);
+      // favorteMealsCtx.addFavorite(mealId);
+      dispatch(addFavorite({ id: mealId }));
     }
   };
 
