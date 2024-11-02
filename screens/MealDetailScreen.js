@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import {
   Button,
   Image,
@@ -12,13 +12,24 @@ import { MealDetails } from "../components/MealDetails";
 import { Subtitle } from "../components/MealDeatil/Subtitle";
 import { List } from "../components/MealDeatil/List";
 import { IconButton } from "../components/IconButton";
+import { FavoritesContext } from "../store/context/favorites-context";
 
 export const MealDetailScreen = ({ route, navigation }) => {
+  const favorteMealsCtx = useContext(FavoritesContext);
+
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
-  const headerBtPressHandler = () => {
-    console.log("te");
+  const mealIsFavorite = favorteMealsCtx.ids.includes(mealId); //배열 에 존재를 확인해 ture or false 를 반환
+  console.log(mealIsFavorite);
+
+  const changeFavoriteStatusHandler = () => {
+    //console.log("te");
+    if (mealIsFavorite) {
+      favorteMealsCtx.removeFavorite(mealId);
+    } else {
+      favorteMealsCtx.addFavorite(mealId);
+    }
   };
 
   useLayoutEffect(() => {
@@ -27,14 +38,14 @@ export const MealDetailScreen = ({ route, navigation }) => {
         // return <Button title="Tap me" onPress={headerBtPressHandler} />;
         return (
           <IconButton
-            icon="star"
+            icon={mealIsFavorite ? "star" : "star-outline"}
             color="white"
-            onPress={headerBtPressHandler}
+            onPress={changeFavoriteStatusHandler}
           />
         );
       },
     });
-  }, [navigation, headerBtPressHandler]);
+  }, [navigation, changeFavoriteStatusHandler]);
 
   return (
     <ScrollView style={styles.root}>
